@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Post Service
+  post-service:
+    build: .
+    ports:
+      - "3000:3000" # Map host port 3000 to container port 3000
+    environment:
+      # Load environment variables from .env file
+      - MONGODB_URI=mongodb://mongo:27017/postdb
+      - PORT=3000
+    # Ensure the service waits for MongoDB to be ready (optional but recommended for production)
+    depends_on:
+      - mongo
+    # Mount the current directory into the container for development with nodemon (optional)
+    # volumes:
+    #   - .:/app
+    #   - /app/node_modules # Exclude node_modules from being overwritten by the volume mount
+    command: npm run dev # Use nodemon for development auto-restarts
+
+  # MongoDB service
+  mongo:
+    image: mongo:4.4 # Use a specific MongoDB version
+    ports:
+      - "27017:27017" # Map host port 27017 to container port 27017 (useful for direct access)
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo_data:/data/db # Persist data outside the container
+    # Configure MongoDB as a replica set (required for some Mongoose features and production)
+    # command: [--replSet, rs0, --bind_ip_all]
+
+volumes:
+  mongo_data:
+
+# Note: For a full replica set setup, you would typically have multiple MongoDB instances
+# and initialize the replica set. This simplified version is for prototyping.
