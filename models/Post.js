@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
-  // Define your post schema fields here, e.g.:
+
   title: {
     type: String,
     required: true,
@@ -12,8 +12,7 @@ const postSchema = new mongoose.Schema({
     required: true
   },
   author: {
-    // You might reference a User model here in a real app
-    type: String, // Placeholder: store author as a string for now
+    type: String, 
     required: true
   },
   createdAt: {
